@@ -1,5 +1,6 @@
 let busId = 1;
 let lineId = 1;
+let transformerId = 1;
 
 let stage = new Konva.Stage({
     container: 'container',
@@ -9,7 +10,6 @@ let stage = new Konva.Stage({
 
 let layer = new Konva.Layer();
 stage.add(layer);
-
 
 class Bus {
 
@@ -71,6 +71,50 @@ class Bus {
         return this.horizontal ?
             this.element.y() + this.element.height() / 2 :
             this.element.y() + this.element.width() / 2
+    }
+
+}
+
+class Transformer {
+
+    constructor(config) {
+        this.element = new Konva.Group({
+            x: config.x,
+            y: config.y,
+            draggable: true
+        });
+
+        this.element.add(new Konva.Circle({
+            x: config.x - 19,
+            y: config.y - 52,
+            radius: 5,
+            fill: 'black',
+            stroke: 'black',
+            strokeWidth: 3
+        }))
+
+        this.element.add(new Konva.Circle({
+            x: config.x,
+            y: config.y - 21,
+            radius: 25,
+            fill: 'white',
+            stroke: 'black',
+            strokeWidth: 3
+        }))
+
+        this.element.add(new Konva.Circle({
+            x: config.x,
+            y: config.y + 21,
+            radius: 25,
+            fill: 'white',
+            stroke: 'black',
+            strokeWidth: 3
+        }))
+
+        this.id = transformerId
+        transformerId++
+
+        layer.add(this.element)
     }
 
 }
@@ -146,6 +190,11 @@ axios.get('file.json').then((res) => {
             buses[tl[0]],
             buses[tl[1]]
         ))
+    })
+
+    let t = new Transformer({
+        x: 100,
+        y: 100
     })
 
     layer.draw();
